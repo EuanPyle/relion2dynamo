@@ -58,5 +58,11 @@ def extract_tomostar_from_image_name(filename: str) -> str:
     tomo_name = p.parts[-2]
     tomostar = tomo_name + '.tomostar'
     return tomostar
+    
+def normalize(df):
+    max_value = df['rlnLogLikeliContribution'].max()
+    min_value = df['rlnLogLikeliContribution'].min()
+    result = (df['rlnLogLikeliContribution'] - min_value) / (max_value - min_value)
+    return result
 
 

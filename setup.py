@@ -1,14 +1,14 @@
 from setuptools import setup
-from dynamo2m import __version__
+from relion2dynamo import __version__
 setup(
-    name='dynamo2m',
+    name='relion2dynamo',
     version=__version__,
-    packages=['dynamo2m'],
-    url='https://github.com/alisterburt/dynamo2m',
+    packages=['relion2dynamo'],
+    url='https://github.com/EuanPyle/relion2dynamo',
     license='BSD',
-    author='aburt',
-    author_email='alisterburt@gmail.com',
-    description='Interface the cryo-EM packages warp, dynamo and M',
+    author='epyle',
+    author_email='euanpyle@gmail.com',
+    description='Convert data.star to Dynamo Table',
     classifiers=[
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
@@ -28,8 +28,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        dynamo2warp=dynamo2m.dynamo2warp:cli
-        warp2dynamo=dynamo2m.warp2dynamo:cli
-        relion_star_downgrade=dynamo2m.relion_star_downgrade:cli
+        relion2dynamo=relion2dynamo.relion2dynamo:cli
     ''',
 )
