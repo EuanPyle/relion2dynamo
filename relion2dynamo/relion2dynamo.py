@@ -8,12 +8,12 @@ from eulerangles import convert_eulers
 from .utils import sanitise_dynamo_table_filename, reextract_table_filename, normalize
 
 
-def relion2dynamo(warp_star_file, output_dynamo_table_file):
+def relion2dynamo(relion_star_file, output_dynamo_table_file):
     """
-    Converts a Warp STAR file into a Dynamo table file.
+    Converts a relion STAR file into a Dynamo table file.
     """
     # Read STAR file
-    relion_star = starfile.read(warp_star_file)
+    relion_star = starfile.read(relion_star_file)
     
     # Remove optics table
     relion_star = pd.DataFrame.from_dict(relion_star['particles']) 
@@ -45,9 +45,9 @@ def relion2dynamo(warp_star_file, output_dynamo_table_file):
     
     dynamo_data['class'] = relion_star['rlnClassNumber']
     
-    #add cc to table
+    #add cc to table - #ADD FEATURE: only do CC on a per tomogram basis
             
-    dynamo_data['cc'] = normalize(relion_star)
+    # dynamo_data['cc'] = normalize(relion_star)
 
     # Convert to DataFrame
     df = pd.DataFrame.from_dict(dynamo_data)
@@ -58,17 +58,17 @@ def relion2dynamo(warp_star_file, output_dynamo_table_file):
         f"Writing out Dynamo table file '{output_dynamo_table_file}' and corresponding table map file with appropriate info...\n")
     dynamotable.write(df, output_dynamo_table_file)
 
-    click.echo(f"\nDone! Converted Warp output '{warp_star_file}' into Dynamo input files")
+    click.echo(f"\nDone! Converted Relion output '{relion_star_file}' into Dynamo input files")
     return
 
 
 @click.command()
-@click.option('--input_star_file', '-i', 'warp_star_file',
-              prompt='Input Warp STAR file',
+@click.option('--input_star_file', '-i', 'relion_star_file',
+              prompt='Input relion STAR file',
               type=click.Path(exists=True),
               required=True)
 @click.option('--output_table_file', '-o', 'dynamo_table_file',
               type=click.Path(exists=False),
               prompt='Output dynamo table file')
-def cli(warp_star_file, dynamo_table_file):
-    relion2dynamo(warp_star_file, dynamo_table_file)
+def cli(relion_star_file, dynamo_table_file):
+    relion2dynamo(relion_star_file, dynamo_table_file)
