@@ -14,7 +14,7 @@ pip install relion2dynamo
 
 ## Requirements
 
-None. Just control over your Python environment.
+Input must be a star file with a data_particles field, e.g. run_data.star from Refine3D or any _data.star
 
 ## Usage
 
