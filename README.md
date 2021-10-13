@@ -16,6 +16,13 @@ pip install relion2dynamo
 
 Input must be a star file with a data_particles field, e.g. run_data.star from Refine3D or any _data.star.
 
+Your tomogram names (rlnTomoName) must be some variant of:
+
+```sh
+[any_string]_[number which refers to tomogram number]
+e.g. TS_01 or ts_1 or tomogram_10
+```
+
 ## Usage
 
 Invoke from the command line via typing:
