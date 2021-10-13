@@ -14,7 +14,7 @@ pip install relion2dynamo
 
 ## Requirements
 
-Input must be a star file with a data_particles field, e.g. run_data.star from Refine3D or any _data.star
+Input must be a star file with a data_particles field, e.g. run_data.star from Refine3D or any _data.star.
 
 ## Usage
 
@@ -26,4 +26,11 @@ and input:
 ```sh
 Input Star File: example.star
 Output Tbl file: test.tbl
+```
+
+Generate motl files via loading Matlab, Dynamo, and running the dynamotable2motl.m script packaged in the main directory to generate motl files:
+
+```sh
+Input Tbl File: test.tbl
+Output Directory file: ./motl/ #Generate a new directory called motl/
 ```
