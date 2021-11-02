@@ -58,7 +58,7 @@ def relion2dynamo(relion_star_file, output_dynamo_table_file):
 				       
 	#########################################
 	
-	dynamo_data['tdrot'] = eulers_dynamo[:, 0]
+        dynamo_data['tdrot'] = eulers_dynamo[:, 0]
         dynamo_data['tilt'] = eulers_dynamo[:, 1]
         dynamo_data['narot'] = eulers_dynamo[:, 2]
     
