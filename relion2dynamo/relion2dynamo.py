@@ -68,12 +68,16 @@ def relion2dynamo(relion_star_file, output_dynamo_table_file):
         
     # add object number to column 21 in Dynamo table
     
-    dynamo_data['reg'] = relion_star['rlnObjectNumber']
-    
+    try:
+        dynamo_data['reg'] = relion_star['rlnObjectNumber']
+    except KeyError:
+        print('rlnObjectNumber not found, skipping')
     #add class number to table
     
-    dynamo_data['class'] = relion_star['rlnClassNumber']
-    
+    try:
+        dynamo_data['class'] = relion_star['rlnClassNumber']
+    except KeyError:
+        print('rlnClassNumber not found, skipping')
     #add cc to table - #ADD FEATURE: only do CC on a per tomogram basis
             
     # dynamo_data['cc'] = normalize(relion_star)
