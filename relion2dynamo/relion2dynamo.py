@@ -28,12 +28,37 @@ def relion2dynamo(relion_star_file, output_dynamo_table_file):
 
     # Get euler angles and convert to dynamo convention (only if eulers present in STAR file)
     if 'rlnAngleRot' in relion_star.columns:
-        eulers_relion = relion_star[['rlnAngleRot', 'rlnAngleTilt', 'rlnAnglePsi']].to_numpy()
+        eulers_relion = relion_star[['rlnAngleRot', 'rlnAngleTilt', 'rlnAnglePsi']].to_numpy()			       
         eulers_dynamo = convert_eulers(eulers_relion,
                                        source_meta='relion',
                                        target_meta='dynamo')
-
-        dynamo_data['tdrot'] = eulers_dynamo[:, 0]
+				       
+	#ADD IF CONDITION TO ONLY DO THIS IF rlnTomoSub EXISTS
+	
+	#eulers_relion_subtom = relion_star[['rlnTomoSubtomogramRot', 'rlnTomoSubtomogramTilt', 'rlnTomoSubtomogramPsi']].to_numpy()
+	#eulers_dynamo_subtom = convert_eulers(eulers_relion_subtom,
+                                       #source_meta='relion',
+                                       #target_meta='dynamo')
+	
+	#eulers_dynamo = euler2matrix(eulers_dynamo,
+                                       #axes='zyz', ####CORRECT?
+                                       #intrinsic=True,
+				       #right_handed_rotation=True)
+	#eulers_dynamo_subtom = euler2matrix(eulers_dynamo_subtom,
+                                       #axes='zyz', ####CORRECT?
+                                       #intrinsic=True,
+				       #right_handed_rotation=True)
+				       
+	#eulers_dynamo = np.dot(eulers_dynamo,eulers_dynamo_subtom) ###### Need to multiply matrices, dot or real multiplication? Or just add?
+	
+	#eulers_dynamo = matrix2euler(eulers_dynamo,
+                                       #axes='zyz', ####CORRECT?
+                                       #intrinsic=True,
+				       #right_handed_rotation=True)
+				       
+	#########################################
+	
+	dynamo_data['tdrot'] = eulers_dynamo[:, 0]
         dynamo_data['tilt'] = eulers_dynamo[:, 1]
         dynamo_data['narot'] = eulers_dynamo[:, 2]
     
@@ -41,6 +66,10 @@ def relion2dynamo(relion_star_file, output_dynamo_table_file):
     
     dynamo_data['tomo'] = relion_star['rlnTomoName'].str.split('_').str[1]
         
+    # add object number to column 21 in Dynamo table
+    
+    dynamo_data['reg'] = relion_star['rlnObjectNumber']
+    
     #add class number to table
     
     dynamo_data['class'] = relion_star['rlnClassNumber']
