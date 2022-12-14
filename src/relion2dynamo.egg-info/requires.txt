@@ -1,0 +1,9 @@
+click
+starfile
+dynamotable
+eulerangles
+typer
+
+[test]
+pytest>=6.0
+pytest-cov

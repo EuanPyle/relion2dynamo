@@ -1,0 +1,49 @@
+Metadata-Version: 2.1
+Name: relion2dynamo
+Version: 0.1.6.dev1+g7df9134.d20221213
+Summary: Converts RELION particle star files to Dynamo tables
+Author: Euan Pyle
+Author-email: euanpyle@gmail.com
+License: BSD 3-Clause License
+Project-URL: homepage, https://github.com/EuanPyle/relion2dynamo
+Project-URL: repository, https://github.com/EuanPyle/relion2dynamo
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Provides-Extra: test
+License-File: LICENSE.txt
+
+# Relion2Dynamo
+## Converts Star Files from RELION 4.0 to Dynamo Table with Metadata for Motl File Generation
+
+Based on [dynamo2m](https://github.com/alisterburt/dynamo2m) by Alister Burt.
+
+## Installation
+
+Installation is carried out via:
+```sh
+pip install relion2dynamo
+```
+
+## Requirements
+
+Your tomogram names (rlnTomoName) must be some variant of:
+
+```sh
+[any_string]_[number which refers to tomogram number]
+e.g. TS_01 or ts_1 or tomogram_10
+```
+
+## Usage
+
+Invoke from the command line and specify #################################
+```sh
+relion2dynamo #############################
+```
