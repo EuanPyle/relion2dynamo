@@ -4,3 +4,6 @@ setup.cfg
 build
 dist
 MANIFEST
+*egg-info
+*__pycache__
+*_version*
