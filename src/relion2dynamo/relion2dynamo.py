@@ -34,21 +34,26 @@ def relion2dynamo_cli(
     # If exists, remove optics table 
     if isinstance(relion_star,OrderedDict):
         try: 
-            relion_star = pd.DataFrame.from_dict(relion_star['particles'])
+            relion_particles = pd.DataFrame.from_dict(relion_star['particles'])
+            relion_optics = pd.DataFrame.from_dict(relion_star['optics'])
         except KeyError:
-            raise RuntimeError("Cannot find data_particles in star file")    
+            raise RuntimeError("Cannot find data_particles or data_optics in star file")    
     
     # Initialise empty dict for dynamo
     dynamo_data = {}
 
     # Get XYZ positions and put into data
+    unbinned_pixel_size = relion_optics['rlnTomoTiltSeriesPixelSize']
+    
     for axis in ('x', 'y', 'z'):
-        relion_heading = 'rlnCoordinate' + axis.upper()
-        dynamo_data[axis] = relion_star[relion_heading]
+        relion_coordinate_heading = 'rlnCoordinate' + axis.upper()
+        relion_shift_heading = 'rlnOrigin' + axis.upper() + 'Angst'
+        relion_shift = relion_particles[relion_shift_heading] / unbinned_pixel_size
+        dynamo_data[axis] = relion_particles[relion_coordinate_heading] - relion_shift 
 
     # Get euler angles and convert to dynamo convention (only if eulers present in STAR file)
-    if 'rlnAngleRot' in relion_star.columns:
-        eulers_relion = relion_star[['rlnAngleRot', 'rlnAngleTilt', 'rlnAnglePsi']].to_numpy()			       
+    if 'rlnAngleRot' in relion_particles.columns:
+        eulers_relion = relion_particles[['rlnAngleRot', 'rlnAngleTilt', 'rlnAnglePsi']].to_numpy()			       
         eulers_dynamo = convert_eulers(eulers_relion,
                                        source_meta='relion',
                                        target_meta='dynamo')				       
@@ -58,15 +63,15 @@ def relion2dynamo_cli(
         dynamo_data['narot'] = eulers_dynamo[:, 2]
     
     # Add tomo to Dynamo table    
-    dynamo_data['tomo'] = relion_star['rlnTomoName'].str.split('_').str[1]
+    dynamo_data['tomo'] = relion_particles['rlnTomoName'].str.split('_').str[1]
         
     # Add object number to Dynamo table
-    if 'rlnObjectNumber' in relion_star.columns:
-        dynamo_data['reg'] = relion_star['rlnObjectNumber']
+    if 'rlnObjectNumber' in relion_particles.columns:
+        dynamo_data['reg'] = relion_particles['rlnObjectNumber']
 
     # Add class number to Dynamo table
-    if 'rlnClassNumber' in relion_star.columns:
-        dynamo_data['class'] = relion_star['rlnClassNumber']
+    if 'rlnClassNumber' in relion_particles.columns:
+        dynamo_data['class'] = relion_particles['rlnClassNumber']
 
     # Convert to DataFrame
     df = pd.DataFrame.from_dict(dynamo_data)
