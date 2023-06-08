@@ -43,7 +43,7 @@ def relion2dynamo_cli(
     dynamo_data = {}
 
     # Get XYZ positions and put into data
-    unbinned_pixel_size = relion_optics['rlnTomoTiltSeriesPixelSize']
+    unbinned_pixel_size = relion_optics['rlnTomoTiltSeriesPixelSize'].values[0]
     
     for axis in ('x', 'y', 'z'):
         relion_coordinate_heading = 'rlnCoordinate' + axis.upper()
