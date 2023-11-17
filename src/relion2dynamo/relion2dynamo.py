@@ -30,6 +30,8 @@ def relion2dynamo_cli(
 
     # Read STAR file
     relion_star = starfile.read(relion_star_file)
+    relion_paricles = None
+    relion_optics = None
     
     # If exists, remove optics table 
     if isinstance(relion_star,OrderedDict):
@@ -38,18 +40,25 @@ def relion2dynamo_cli(
             relion_optics = pd.DataFrame.from_dict(relion_star['optics'])
         except KeyError:
             raise RuntimeError("Cannot find data_particles or data_optics in star file")    
-    
+    else:
+        relion_particles = relion_star
+
     # Initialise empty dict for dynamo
     dynamo_data = {}
 
     # Get XYZ positions and put into data
-    unbinned_pixel_size = relion_optics['rlnTomoTiltSeriesPixelSize'].values[0]
-    
     for axis in ('x', 'y', 'z'):
         relion_coordinate_heading = 'rlnCoordinate' + axis.upper()
-        relion_shift_heading = 'rlnOrigin' + axis.upper() + 'Angst'
-        relion_shift = relion_particles[relion_shift_heading] / unbinned_pixel_size
-        dynamo_data[axis] = relion_particles[relion_coordinate_heading] - relion_shift 
+        if 'rlnOriginXAngst' in relion_particles.columns:
+            if relion_optics is not None:
+                unbinned_pixel_size = relion_optics['rlnTomoTiltSeriesPixelSize'].values[0]
+            else:
+                unbinned_pixel_size = relion_particles['rlnTomoTiltSeriesPixelSize'].values[0]
+            relion_shift_heading = 'rlnOrigin' + axis.upper() + 'Angst'
+            relion_shift = relion_particles[relion_shift_heading] / unbinned_pixel_size
+            dynamo_data[axis] = relion_particles[relion_coordinate_heading] - relion_shift 
+        else: 
+            dynamo_data[axis] = relion_particles[relion_coordinate_heading]
 
     # Get euler angles and convert to dynamo convention (only if eulers present in STAR file)
     if 'rlnAngleRot' in relion_particles.columns:
