@@ -4,7 +4,6 @@ import dynamotable
 import typer
 
 from eulerangles import convert_eulers
-from collections import OrderedDict
 from pathlib import Path
 from typing import Optional
 
@@ -30,11 +29,11 @@ def relion2dynamo_cli(
 
     # Read STAR file
     relion_star = starfile.read(relion_star_file)
-    relion_paricles = None
+    relion_particles = None
     relion_optics = None
     
     # If exists, remove optics table 
-    if isinstance(relion_star,OrderedDict):
+    if isinstance(relion_star,dict):
         try: 
             relion_particles = pd.DataFrame.from_dict(relion_star['particles'])
             relion_optics = pd.DataFrame.from_dict(relion_star['optics'])
